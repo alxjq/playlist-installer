@@ -1,5 +1,5 @@
 # playlist-installer
-public playlist installer for automationw
+public playlist installer for automation
 
 you need python yt-dlp liblary and ffmpeg.
 

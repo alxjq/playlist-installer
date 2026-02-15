@@ -1,8 +1,12 @@
 import yt_dlp
+import os
 
 print("==========================")
 print("+=    MUSIC INSTALLER    =+")
 print("==========================")
+
+# create 'songs' folder if it doesn't exist
+os.makedirs("songs", exist_ok=True)
 
 def progress_hook(d):
     if d['status'] == 'downloading':
@@ -19,6 +23,13 @@ ydl_opts = {
     'format': 'bestaudio/best',
     'outtmpl': 'songs/%(title)s.%(ext)s',
     'progress_hooks': [progress_hook],
+
+    # 🔥 SKIP ERRONEOUS VIDEOS
+    'ignoreerrors': True,
+
+    # 🔥 SKIP PREVIOUSLY DOWNLOADED SONGS
+    'download_archive': 'downloaded.txt',
+
     'postprocessors': [{
         'key': 'FFmpegExtractAudio',
         'preferredcodec': 'mp3',
@@ -26,7 +37,11 @@ ydl_opts = {
     }],
 }
 
-with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-    ydl.download([playlist_url])
+try:
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([playlist_url])
+except Exception as e:
+    print("\nAn error occurred, but the program continues:")
+    print(e)
 
-print("\nAll songs downloaded.")
+print("\nAll available songs downloaded.")
